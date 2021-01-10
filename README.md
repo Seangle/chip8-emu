@@ -25,7 +25,8 @@ A0BF            ZXCV
 
 (Games not created by me, see references.)
 
-![Space Invaders](/screenshots/space_invaders_demo.png)
+![Space_Invaders](/screenshots/space_invaders_gameplay.png)
+
 using
 ```
 COLOUR_ACTIVE = 0xE0D9D9;
@@ -33,6 +34,7 @@ COLOUR_INACTIVE =0x390000;
 ```
 
 ![Brick](/screenshots/brick_gameplay.png)
+
 using
 ```
 COLOUR_ACTIVE = 0x729FCF;
@@ -40,6 +42,7 @@ COLOUR_INACTIVE = 0x001A21;
 ```
 
 ![Maze](/screenshots/maze_demo.png)
+
 using
 ```
 COLOUR_ACTIVE = 0xC89A30;
