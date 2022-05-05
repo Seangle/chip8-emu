@@ -18,25 +18,25 @@ pub struct Chip8 {
 
 impl Chip8 {
     pub fn new() -> Chip8 {
-        let fontset: [u8; 80] = [ 
-        0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
-        0x20, 0x60, 0x20, 0x20, 0x70, // 1
-        0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
-        0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
-        0x90, 0x90, 0xF0, 0x10, 0x10, // 4
-        0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
-        0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
-        0xF0, 0x10, 0x20, 0x40, 0x40, // 7
-        0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
-        0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
-        0xF0, 0x90, 0xF0, 0x90, 0x90, // A
-        0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
-        0xF0, 0x80, 0x80, 0x80, 0xF0, // C
-        0xE0, 0x90, 0x90, 0x90, 0xE0, // D
-        0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
-        0xF0, 0x80, 0xF0, 0x80, 0x80  // F
+        let fontset: [u8; 80] = [
+            0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
+            0x20, 0x60, 0x20, 0x20, 0x70, // 1
+            0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
+            0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
+            0x90, 0x90, 0xF0, 0x10, 0x10, // 4
+            0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
+            0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
+            0xF0, 0x10, 0x20, 0x40, 0x40, // 7
+            0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
+            0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
+            0xF0, 0x90, 0xF0, 0x90, 0x90, // A
+            0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
+            0xF0, 0x80, 0x80, 0x80, 0xF0, // C
+            0xE0, 0x90, 0x90, 0x90, 0xE0, // D
+            0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
+            0xF0, 0x80, 0xF0, 0x80, 0x80, // F
         ];
-        
+
         // Load fontset into memory
         let mut memory: [u8; 4096] = [0; 4096];
         for i in 0..80 {
@@ -61,8 +61,8 @@ impl Chip8 {
 
     pub fn emulate_cycle(&mut self) {
         // Fetch Opcode
-        self.opcode = (self.memory[self.pc as usize] as u16) << 8 
-                    | (self.memory[(self.pc as usize) + 1]) as u16; 
+        self.opcode = (self.memory[self.pc as usize] as u16) << 8
+            | (self.memory[(self.pc as usize) + 1]) as u16;
 
         // Decode and Execute
         match self.opcode & 0xF000 {
@@ -183,7 +183,7 @@ impl Chip8 {
             self.pc += 4;
         } else {
             self.pc += 2;
-        } 
+        }
     }
 
     fn insn_5xy0(&mut self) {
@@ -192,7 +192,7 @@ impl Chip8 {
             self.pc += 4;
         } else {
             self.pc += 2;
-        }    
+        }
     }
 
     fn insn_6xnn(&mut self) {
@@ -204,7 +204,7 @@ impl Chip8 {
     fn insn_7xnn(&mut self) {
         // Add NN to Vx
         // Need u16 to prevent overflow panic
-        let result = self.v[bs8_usize(self.opcode)]as u16 + (self.opcode & 0x00FF);
+        let result = self.v[bs8_usize(self.opcode)] as u16 + (self.opcode & 0x00FF);
         self.v[bs8_usize(self.opcode)] = (result & 0x00FF) as u8;
         self.pc += 2;
     }
@@ -236,7 +236,7 @@ impl Chip8 {
     fn insn_8xy4(&mut self) {
         // Add Vy to Vx, set overflow on Vf
         // need u16 to prevent overflow panic
-        let result = self.v[bs8_usize(self.opcode)] as u16 + self.v[bs4_usize(self.opcode)] as u16; 
+        let result = self.v[bs8_usize(self.opcode)] as u16 + self.v[bs4_usize(self.opcode)] as u16;
         self.v[bs8_usize(self.opcode)] = (result & 0x00FF) as u8;
         self.v[0xF] = ((result & 0x0100) >> 8) as u8;
         self.pc += 2;
@@ -245,7 +245,8 @@ impl Chip8 {
     fn insn_8xy5(&mut self) {
         // Sub Vy from Vx, set carry on Vf
         // Need u16 to prevent overflow panic
-        let result = (0x0100 | (self.v[bs8_usize(self.opcode)] as u16)) - self.v[bs4_usize(self.opcode)] as u16;
+        let result = (0x0100 | (self.v[bs8_usize(self.opcode)] as u16))
+            - self.v[bs4_usize(self.opcode)] as u16;
         self.v[bs8_usize(self.opcode)] = (result & 0x00FF) as u8;
         self.v[0xF] = ((result & 0x0100) >> 8) as u8;
         self.pc += 2;
@@ -261,7 +262,8 @@ impl Chip8 {
     fn insn_8xy7(&mut self) {
         // Sub Vx from Vy, store in Vx, set carry on Vf
         // Need u16 to prevent overflow panic
-        let result = (0x0100 | (self.v[bs4_usize(self.opcode)] as u16)) - self.v[bs8_usize(self.opcode)] as u16;
+        let result = (0x0100 | (self.v[bs4_usize(self.opcode)] as u16))
+            - self.v[bs8_usize(self.opcode)] as u16;
         self.v[bs8_usize(self.opcode)] = (result & 0x00FF) as u8;
         self.v[0xF] = ((result & 0x0100) >> 4) as u8;
         self.pc += 2;
@@ -307,7 +309,7 @@ impl Chip8 {
         let y: u16 = self.v[bs4_usize(self.opcode)] as u16;
         let height: u16 = self.opcode & 0x000F;
         let mut pixel: u16;
-        
+
         self.v[0xF] = 0;
         for yline in 0..height {
             pixel = self.memory[(self.index + yline) as usize] as u16;
@@ -315,7 +317,7 @@ impl Chip8 {
             for xline in 0..8u16 {
                 if (pixel & (0x80 >> xline)) != 0 {
                     let mut pos = (x + xline + ((y + yline) * 64)) as usize;
-                    
+
                     // prevent drawing outside of valid locations
                     if pos >= 2048 {
                         pos = 2047;
@@ -324,7 +326,7 @@ impl Chip8 {
                     if self.display[pos] == 1 {
                         self.v[0xF] = 1;
                     }
-                    
+
                     self.display[pos] ^= 1;
                 }
             }
@@ -361,7 +363,7 @@ impl Chip8 {
     fn insn_fx0a(&mut self) {
         // await keypress
         let mut key_pressed = false;
-        
+
         for i in 0..0xF {
             if self.keypad[i] != 0 {
                 self.v[bs8_usize(self.opcode)] = i as u8;
@@ -425,7 +427,7 @@ impl Chip8 {
         }
         //self.index += ((self.opcode & 0x0F00) >> 8) + 1;
         self.pc += 2;
-    }   
+    }
 }
 
 fn bs8_usize(val: u16) -> usize {

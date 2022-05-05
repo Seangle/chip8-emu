@@ -4,6 +4,7 @@ A Chip 8 Emulator Written in Rust and SDL2.
 
 ## Building and Running ##
 The emulator was built on Ubuntu 20.04 LTS, and requires ```libsdl2-dev```.
+It also runs on Ubuntu 22.04 LTS.
 
 Clone the repository where you'd like, and in your terminal type
 
@@ -60,5 +61,3 @@ http://www.multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter
 
 ## License ##
 [Licensed](./LICENSE) under the MIT License
-
-Copyright 2021 Sam van den Eijnden
